@@ -22,3 +22,19 @@ Implement project endpoints:
 - `POST /projects`
 
 Use raw SQL against PostgreSQL.
+
+## Adding Packages
+
+Add backend dependencies to `backend/pyproject.toml`, then rebuild and restart the backend container:
+
+```sh
+docker compose up --build backend
+```
+
+If you use `uv` locally, you can also add a package from the `backend/` directory:
+
+```sh
+uv add package-name
+```
+
+Then rebuild the container.

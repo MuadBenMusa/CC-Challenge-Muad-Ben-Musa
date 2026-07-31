@@ -107,6 +107,30 @@ make migrate-down    # roll back the latest migration
 make migrate-status  # show migration status
 ```
 
+## Adding Packages
+
+If you add a backend package, update `backend/pyproject.toml`, then rebuild and restart the backend container:
+
+```sh
+docker compose up --build backend
+```
+
+If you add a frontend package, update `frontend/package.json`, then rebuild and restart the frontend container:
+
+```sh
+docker compose up --build frontend
+```
+
+The frontend uses a Docker volume for `node_modules`. If a newly added frontend package is still missing after rebuilding, remove that volume and start the frontend again:
+
+```sh
+docker compose down
+docker volume rm cc-challenge_frontend_node_modules
+docker compose up --build frontend
+```
+
+Avoid `docker compose down -v` unless you want to delete the PostgreSQL data volume too.
+
 ## Service Docs
 
 - [Backend](./backend/README.md)
