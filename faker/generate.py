@@ -57,6 +57,8 @@ def main() -> None:
     Faker.seed(SEED)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    for stale_file in ("customers.csv", "projects.csv"):
+        (OUTPUT_DIR / stale_file).unlink(missing_ok=True)
 
     customers = []
     for index in range(1, CUSTOMER_COUNT + 1):
@@ -97,7 +99,9 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    print(f"Wrote {len(customers)} customers and {len(projects)} projects to {OUTPUT_DIR}")
+    print(
+        f"Wrote {len(customers)} customers and {len(projects)} projects to {OUTPUT_DIR}"
+    )
 
 
 if __name__ == "__main__":

@@ -75,6 +75,9 @@ services:
   faker:
     build:
       context: ./faker
+    environment:
+      DATABASE_URL: ${DATABASE_URL_DOCKER:-postgres://challenge:challenge@postgres:5432/challenge?sslmode=disable}
+      DATA_DIR: /app/data
     volumes:
       - ./data:/app/data
     networks:

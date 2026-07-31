@@ -72,4 +72,19 @@ Generate source files with:
 make data
 ```
 
-This creates `data/customers.json` and `data/projects.json`. Use those files to design and populate your schema.
+This creates JSON files:
+
+- `data/customers.json`
+- `data/projects.json`
+
+Use those files to design and populate your schema.
+
+## Python Import Starter
+
+The repository includes `faker/import_data.py` as a starter import script. It loads the generated JSON files and connects to PostgreSQL, but the insert loops and SQL are left for you to implement based on your schema.
+
+Run it with:
+
+```sh
+make import-data
+```

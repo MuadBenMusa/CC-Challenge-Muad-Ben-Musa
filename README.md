@@ -25,7 +25,7 @@ The backend and frontend directories are mounted into their containers. Changes 
 
 Implement a project overview feature:
 
-- Generate the JSON source data.
+- Generate the source data.
 - Create a PostgreSQL schema with a dbmate SQL migration.
 - Load the generated project data into PostgreSQL.
 - Implement `GET /projects` and `POST /projects` in FastAPI.
@@ -59,6 +59,12 @@ Create or edit your SQL migration in `database/migrations/`, then apply it:
 
 ```sh
 make migrate-up
+```
+
+After your schema exists, use `faker/import_data.py` as a starting point for importing the generated JSON data into PostgreSQL. The script loads the generated files and connects to the database, but you need to add the insert SQL for your schema.
+
+```sh
+make import-data
 ```
 
 Reset the database:
@@ -100,7 +106,8 @@ make up              # start the stack
 make down            # stop the stack
 make logs            # follow service logs
 make reset           # remove database volume and restart PostgreSQL
-make data            # generate data/customers.json and data/projects.json
+make data            # generate customer and project source data
+make import-data     # run the starter Python import script
 make migrate-new     # create a new dbmate migration named initial-schema
 make migrate-up      # apply migrations
 make migrate-down    # roll back the latest migration

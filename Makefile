@@ -1,4 +1,4 @@
-.PHONY: up down logs reset migrate-up migrate-down migrate-new migrate-status data
+.PHONY: up down logs reset migrate-up migrate-down migrate-new migrate-status data import-data
 
 up:
 	docker compose up --build
@@ -26,5 +26,9 @@ migrate-status:
 	docker compose --profile tools run --rm dbmate status
 
 data:
+	docker compose --profile tools build faker
 	docker compose --profile tools run --rm faker
 
+import-data:
+	docker compose --profile tools build faker
+	docker compose --profile tools run --rm faker python import_data.py
