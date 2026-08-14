@@ -5,7 +5,10 @@ export default defineConfig({
   plugins: [svelte()],
   server: {
     port: 5173,
-    strictPort: true
+    strictPort: true,
+    watch: {
+      usePolling: true
+    }
   }
 });
 

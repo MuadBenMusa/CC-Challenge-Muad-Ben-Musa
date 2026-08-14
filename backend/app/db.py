@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from psycopg import AsyncConnection
 from psycopg.rows import dict_row
 
-from app.config import settings
+from .config import settings
 
 
 @asynccontextmanager

@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.config import settings
+from .config import settings
+from .db import get_connection
+from .projects.router import router as projects_router
 
 app = FastAPI(
     title="Sewage Pipe Project Challenge API",
@@ -21,4 +23,7 @@ app.add_middleware(
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+app.include_router(projects_router)
 

@@ -1,7 +1,32 @@
 <script lang="ts">
-  import Header from "./lib/Header.svelte";
+  import { onMount } from "svelte";
 
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+  import Header from "./lib/components/Header.svelte";
+  import ProjectTable from "./lib/components/ProjectTable.svelte";
+  import { getProjects } from "./lib/api/projects";
+  import type { Project, ProjectStatus } from "./lib/types/project";
+
+  type StatusFilter = ProjectStatus | "";
+
+  let projects: Project[] = [];
+  let selectedStatus: StatusFilter = "";
+  let loading = true;
+  let error = "";
+
+  async function loadProjects(): Promise<void> {
+    loading = true;
+    error = "";
+
+    try {
+      projects = await getProjects(selectedStatus || undefined);
+    } catch {
+      error = "Projekte konnten nicht geladen werden.";
+    } finally {
+      loading = false;
+    }
+  }
+
+  onMount(loadProjects);
 </script>
 
 <Header />
@@ -10,19 +35,30 @@
   <section class="toolbar">
     <div>
       <h1>Kanalprojekte</h1>
-      <p>Projektuebersicht fuer Reinigung, Inspektion und Sanierung.</p>
+      <p>Projektübersicht für Reinigung, Inspektion und Sanierung.</p>
     </div>
-    <span class="api-pill">{apiBaseUrl}</span>
+
+    <label class="status-filter">
+      <span>Status</span>
+
+      <select bind:value={selectedStatus} onchange={loadProjects}>
+        <option value="">Alle</option>
+        <option value="open">Offen</option>
+        <option value="in progress">In Bearbeitung</option>
+        <option value="done">Erledigt</option>
+      </select>
+    </label>
   </section>
 
   <section class="workbench" aria-label="Projektliste">
-    <div class="empty-state">
-      <h2>Projektliste implementieren</h2>
-      <p>
-        Lade die Projekte direkt von der FastAPI, sortiere sie nach Datum und
-        ergaenze einen Statusfilter.
-      </p>
-    </div>
+    {#if loading}
+      <p class="message">Projekte werden geladen...</p>
+    {:else if error}
+      <p class="message error">{error}</p>
+    {:else if projects.length === 0}
+      <p class="message">Keine Projekte für diesen Status gefunden.</p>
+    {:else}
+      <ProjectTable {projects} />
+    {/if}
   </section>
 </main>
-
